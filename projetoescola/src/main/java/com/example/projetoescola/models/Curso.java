@@ -1,10 +1,20 @@
 package com.example.projetoescola.models;
 
+
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+
 
 @Entity
 public class Curso {
@@ -17,6 +27,23 @@ public class Curso {
 
     @Column(nullable = false)
     private Integer cargaHoraria;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="CURSO_DISCIPLINA",
+    joinColumns={@JoinColumn(name = "CURSO_ID")},
+    inverseJoinColumns = {@JoinColumn(name = "DISCIPLINA_ID")})
+    private List<Disciplina> disciplinas;
+
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
+    }
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
+    @ManyToOne
+    @JoinColumn(name = "categoriaCurso_id")
+    private CategoriaCurso categoriaCurso;
+    
     
     public Curso(Long id, String nome, Integer cargaHoraria) {
         this.id = id;
@@ -47,6 +74,13 @@ public class Curso {
     @Override
     public String toString() {
         return "Curso [id=" + id + ", nome=" + nome + ", cargaHoraria=" + cargaHoraria + "]";
+    }
+
+    public CategoriaCurso getCategoriaCurso() {
+        return categoriaCurso;
+    }
+    public void setCategoriaCurso(CategoriaCurso categoriaCurso) {
+        this.categoriaCurso = categoriaCurso;
     }
 
 }
